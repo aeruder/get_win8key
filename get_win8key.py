@@ -46,7 +46,7 @@ def GetAcpiTable(table,TableDwordID):
 	BufferSize.value=ret
 	ret2 = GetSystemFirmwareTable(FirmwareTableProviderSignature, FirmwareTableID, pFirmwareTableBuffer, BufferSize)
 	return pFirmwareTableBuffer.raw
-	
+
 def GetWindowsKey():
 	#returns Windows Key as string
 	table=b"MSDM"
@@ -62,8 +62,8 @@ def GetWindowsKey():
 	else:
 		print("[ERR] - ACPI table " + str(table) + " not found on this system")
 		return False
-	
-try:	
+
+try:
 	WindowsKey=GetWindowsKey()
 	if WindowsKey==False:
 		print("unexpected error")
