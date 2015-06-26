@@ -8,8 +8,6 @@ import ctypes.wintypes
 #ck, 03-Jan-2014 (christian@korneck.de)
 #####################################################
 
-#for ref: common STR to DWORD conversions: ACPI: 1094930505 - FIRM: 1179210317 - RSMB: 1381190978 - FACP: 1178682192 - PCAF: 1346584902 - MSDM: 1297302605 - MDSM  1296323405
-
 def EnumAcpiTables():
 #returns a list of the names of the ACPI tables on this system
 	FirmwareTableProviderSignature=ctypes.wintypes.DWORD(1094930505)
@@ -32,12 +30,15 @@ def FindAcpiTable(table):
 	else:
 		return False
 
-def GetAcpiTable(table,TableDwordID):
+def GetAcpiTable(table):
 #returns raw contents of ACPI table
 	#http://msdn.microsoft.com/en-us/library/windows/desktop/ms724379x
+	tableID = 0
+	for b in reversed(table):
+		tableID = (tableID << 8) + b
 	GetSystemFirmwareTable=ctypes.WinDLL("Kernel32").GetSystemFirmwareTable
 	FirmwareTableProviderSignature=ctypes.wintypes.DWORD(1094930505)
-	FirmwareTableID=ctypes.wintypes.DWORD(int(TableDwordID))
+	FirmwareTableID=ctypes.wintypes.DWORD(int(tableID))
 	pFirmwareTableBuffer=ctypes.create_string_buffer(0)
 	BufferSize=ctypes.wintypes.DWORD(0)
 	ret = GetSystemFirmwareTable(FirmwareTableProviderSignature, FirmwareTableID, pFirmwareTableBuffer, BufferSize)
@@ -50,10 +51,9 @@ def GetAcpiTable(table,TableDwordID):
 def GetWindowsKey():
 	#returns Windows Key as string
 	table=b"MSDM"
-	TableDwordID=1296323405
 	if FindAcpiTable(table)==True:
 		try:
-			rawtable = GetAcpiTable(table, TableDwordID)
+			rawtable = GetAcpiTable(table)
 			#http://msdn.microsoft.com/library/windows/hardware/hh673514
 			#byte offset 36 from beginning = Microsoft 'software licensing data structure' / 36 + 20 bytes offset from beginning = Win Key
 			return rawtable[56:len(rawtable)].decode("utf-8")
