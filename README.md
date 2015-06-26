@@ -3,7 +3,6 @@ get_win8key
 
 script to read a preinstalled Windows 8.x OEM license key from a PC's firmware
 
-
 Description
 -------------
 PCs with a preinstalled Windows 8.x OEM version don't seem to ship with any printed license record, CD Key, etc.
@@ -13,16 +12,27 @@ To still be able to backup / inventorize the license key, this script tries to r
 (from ACPI -> MSDM table -> byte offset 56 to end)
 
 
-Usage
+Windows Usage
 -------------
+
 run "get_win8key.exe" or "python get_win8key.py" from a Windows shell.
+
+Linux Usage
+-----------
+
+sudo python get_win8key.py
 
 Requirements
 -------------
--Windows Vista or higher (32 or 64 bit)  
--tested with Python 2.7 and 3.4
+
+Executable:
+* Windows Vista or higher (32 or 64 bit)
+
+Python:
+* Linux or Windows
+* Python 2.7 or 3.4
 
 Files
 -------------
-get_win8key.py..................the script  
-get_win8key.exe.................compiled py2exe  
+get_win8key.py..................the script
+get_win8key.exe.................compiled with py2exe
